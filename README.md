@@ -4,5 +4,3 @@ Keeptruckin mobile app
 
 in flutter
 
-## Getting Started
-
