@@ -11,9 +11,9 @@ class MyApp extends StatelessWidget {
       title: 'KEEPTRUCKIN',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.black,
+          primaryColor: Color(0xFFf6f7f8),
           primaryIconTheme: IconThemeData(color: Colors.black),
-          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.black, fontFamily: "OpenSans"))
+          primaryTextTheme: TextTheme(title: TextStyle(color: Colors.black, /*fontFamily: "OpenSans",*/ fontWeight: FontWeight.normal  ))
 
       ),
       home: new HomeScreen(),

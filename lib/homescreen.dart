@@ -3,7 +3,7 @@ import 'package:kt_flutter/homebody.dart';
 
 class HomeScreen extends StatelessWidget {
   final topBar = new AppBar(
-    backgroundColor: new Color(0xfff8faf8),
+   // backgroundColor: Color(0),
     centerTitle: true,
     elevation: 1,
     actions: <Widget>[
