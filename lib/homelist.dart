@@ -1,20 +1,39 @@
 import 'package:flutter/material.dart';
 
 class HomeList extends StatelessWidget {
-  @override
+
+  final String cardHeading;
+  final String subHeading;
+  final String date;
+  final double radialPercentage;
+
+  const HomeList({this.cardHeading, this.subHeading, this.date, this.radialPercentage});
+
   Widget build(BuildContext) {
     return Column(
         children: [
           Align(
             alignment: Alignment.bottomLeft,
             heightFactor: 1,
-            child: Text('\n\n    Log Audit Summary \n    View Logs\n',
+            child: Text(cardHeading,
             textAlign: TextAlign.left,
       style: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w600,
         fontSize: 13.0,
         fontFamily: "openSans"),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            heightFactor: 1,
+            child: Text(subHeading,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13.0,
+                  fontFamily: "openSans"),
             ),
           ),
           SizedBox(
@@ -28,9 +47,8 @@ class HomeList extends StatelessWidget {
             borderRadius: BorderRadius.only(topLeft: Radius.circular(4), topRight: Radius.circular(4))
         ),
         child: Center(
-          child: Text("JANUARY 5  -  JANUARY 19", textAlign: TextAlign.center, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w200),),
+          child: Text(date, textAlign: TextAlign.center, style: TextStyle(fontSize: 9, fontWeight: FontWeight.w200),),
         ),
-
       ),
     ),
     SizedBox(
@@ -43,8 +61,10 @@ class HomeList extends StatelessWidget {
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4))
         ),
         child: Align(
-    alignment: Alignment.bottomLeft,
-          child: Text(" Compliant Logs\n\n Logs with HOS Violations\n\n Logs with Form & Manner Errors\n", textAlign: TextAlign.left, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),),
+    alignment: Alignment.center,
+          child: CircularProgressIndicator(
+            value: radialPercentage,
+          )//Text(" Compliant Logs\n\n Logs with HOS Violations\n\n Logs with Form & Manner Errors\n", textAlign: TextAlign.left, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),),
         ),
 
       )
