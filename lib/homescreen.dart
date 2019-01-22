@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:kt_flutter/homebody.dart';
 
+
 class HomeScreen extends StatelessWidget {
+
+  //String date;
+
+  // HomeScreen({@required this.date});
+
   final topBar = new AppBar(
    // backgroundColor: Color(0),
     centerTitle: true,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kt_flutter/homescreen.dart';
+import 'package:kt_flutter/loginscreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           primaryTextTheme: TextTheme(title: TextStyle(color: Colors.black, /*fontFamily: "OpenSans",*/ fontWeight: FontWeight.normal  ))
 
       ),
-      home: new HomeScreen(),
+      home: new LoginScreen(),
     );
   }
 }
