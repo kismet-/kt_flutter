@@ -3,21 +3,54 @@ import 'package:flutter/material.dart';
 import 'model.dart';
 import 'services.dart';
 
-class HomeList extends StatelessWidget {
+Services service = new Services();
 
+class HomeListCard extends StatefulWidget {
 
   final String cardHeading;
   final String subHeading;
-  String date;
-  num radialPercentage;
+  final String date;
+  final double radialPercentage;
   final String label;
 
-  HomeList(
+  HomeListCard(
       {this.cardHeading, this.subHeading, this.date, this.radialPercentage, this.label});
 
+  @override
+  State<StatefulWidget> createState() {
+    return HomeListCardState(cardHeading: cardHeading,
+        subHeading: subHeading,
+        date: date,
+        radialPercentage: radialPercentage,
+        label: label);
+  }
+}
+
+class HomeListCardState extends State<HomeListCard>
+    with AutomaticKeepAliveClientMixin<HomeListCard> {
+
+  bool get wantKeepAlive => true;
+
+  final String cardHeading;
+  final String subHeading;
+  final String date;
+  final num radialPercentage;
+  final String label;
+
+  HomeListCardState(
+      {this.cardHeading, this.subHeading, this.date, this.radialPercentage, this.label});
+
+  Future<Logs> _logs = service.getLogs();
+
+  void load() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // ---------------  Card Heading -----------------\\
         Align(
           alignment: Alignment.bottomLeft,
           heightFactor: 1,
@@ -30,6 +63,7 @@ class HomeList extends StatelessWidget {
                 fontFamily: "openSans"),
           ),
         ),
+        // ----------------  Card Subheading -----------------\\
         Align(
           alignment: Alignment.bottomLeft,
           heightFactor: 1,
@@ -42,6 +76,7 @@ class HomeList extends StatelessWidget {
                 fontFamily: "openSans"),
           ),
         ),
+        // ---------------  Date  -----------------\\
         SizedBox(
           height: 45.0,
           width: 355.0,
@@ -55,14 +90,20 @@ class HomeList extends StatelessWidget {
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))
             ),
             child: Center(
+              // ---------------  Date is returned here from API via Future-----------------\\
               child: FutureBuilder<Logs>(
-                  future: getLogs(),
+                  future: _logs,
                   builder: (context, snapshot) {
-                    return Text(convertDate(snapshot.data.startDate) + " - " +
-                        convertDate(snapshot.data.endDate),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 9, fontWeight: FontWeight.w200));
+                    if (snapshot.data == null) {
+                      return Text("");
+                    } else {
+                      return Text(
+                          service.convertDate(snapshot.data.startDate) + " - " +
+                              service.convertDate(snapshot.data.endDate),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 9, fontWeight: FontWeight.w200));
+                    }
                   }
               ),
             ),
@@ -98,6 +139,7 @@ class HomeList extends StatelessWidget {
                                     child: Container(
                                       width: 70.0,
                                       height: 70.0,
+                                      // ------------------  Card Radial Percentage -----------------\\
                                       child: new CircularProgressIndicator(
                                         value: radialPercentage,
                                       ),
@@ -107,7 +149,9 @@ class HomeList extends StatelessWidget {
                               Positioned(
                                   top: 75,
                                   left: 162,
-                                  child: Text(radialPercentage.toString() + "%")
+                                  child: Text(
+                                      (radialPercentage * 100).toStringAsFixed(
+                                          0) + "%")
                               ),
                               Align(
                                   alignment: Alignment.bottomCenter,

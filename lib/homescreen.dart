@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:kt_flutter/homebody.dart';
 
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeScreenState();
+  }
+}
 
-  //String date;
+class _HomeScreenState extends State<HomeScreen> {
 
-  // HomeScreen({@required this.date});
+  void load() {
+    setState(() {});
+  }
 
   final topBar = new AppBar(
    // backgroundColor: Color(0),
@@ -19,33 +26,45 @@ class HomeScreen extends StatelessWidget {
       )
     ],
   );
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Scaffold(
         body: new HomeBody(),
       appBar: topBar,
         drawer: Drawer(
-          child: ListView(
-            //color: 0xcce2ff,
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: new Image.asset('assets/icons/KTlogo.png', width: 162.0,),
+            child: Center(
+              child: ListView(
+                //color: 0xcce2ff,
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  DrawerHeader(
+                    child: new Image.asset(
+                      'assets/icons/KTlogo.png', width: 162.0,),
+                  ),
+                  Center(
+                    child: ListTile(
+                      title: Text('Item 1'),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text('Item 2'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  RaisedButton(
+                    textColor: Colors.blue,
+                    child: Text('Login'),
+                    onPressed: () {
+                      load();
+                    },
+                  )
+                ],
               ),
-              ListTile(
-                title: Text('Item 1'),
-                onTap: (){
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Item 2'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
           )
     )
     );

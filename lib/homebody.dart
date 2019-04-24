@@ -1,69 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:kt_flutter/homelist.dart';
+import 'package:kt_flutter/scorecard.dart';
 
-import 'model.dart';
+import 'eldcard.dart';
+import 'logauditcard.dart';
 import 'services.dart';
+import 'utilizationcard.dart';
 
+Services service = new Services();
 
+class HomeBody extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _HomeBodyState();
+  }
+}
 
-class HomeBody extends StatelessWidget{
+class _HomeBodyState extends State<HomeBody> {
+  
+  void load() {
+    setState(() {
 
-  //HomeBody({@required this.date});
+    });
+  }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
             child: ListView(
                 children: <Widget>[
-                  FutureBuilder<Logs>(
-                      future: getLogs(),
-                      builder: (context, snapshot) {
-                        return HomeList(
-                          cardHeading: '\n    Log Audit Summary',
-                          subHeading: '    View Logs\n',
-                          radialPercentage: snapshot.data.logsCount.compliant /
-                              snapshot.data.logsCount.all,
-                          label: "Compliance",
-                        );
-                      }
-                  ),
-                  FutureBuilder<Scorecard>(
-                      future: getScore(),
-                      builder: (context, snapshot) {
-                        return HomeList(
-                          cardHeading: '\n    Scorecards Summary',
-                          subHeading: '    View Scorecards\n',
-                          radialPercentage: snapshot.data
-                              .driverPerformanceSummary.totalScore,
-                          label: "Safety Score",
-                        );
-                      }
-                  ),
-                  FutureBuilder<ElDevents>(
-                      future: getELDevents(),
-                      builder: (context, snapshot) {
-                        return HomeList(
-                          cardHeading: '\n    ELD Events Summary',
-                          subHeading: '    View ELD Events\n',
-                          radialPercentage: snapshot.data.drivingPeriodsCount
-                              .interrupted /
-                              snapshot.data.drivingPeriodsCount.all,
-                          label: "Identified",
-                        );
-                      }
-                  ),
-                  FutureBuilder<Utilization>(
-                      future: getUtilization(),
-                      builder: (context, snapshot) {
-                        return HomeList(
-                          cardHeading: '\n    Vehicle Utilization',
-                          subHeading: '    View Utilization Summary\n',
-                          radialPercentage: snapshot.data.idlingSummary
-                              .idleDuration /
-                              snapshot.data.idlingSummary.motionDuration,
-                          label: "Utilization",
-                        );
-                      }
+                  LogAuditCard(),
+                  ScoreCard(),
+                  ELDCard(),
+                  UtilizationCard(),
+                  RaisedButton(
+                    textColor: Colors.blue,
+                    child: Text('Login'),
+                    onPressed: () {
+                      load();
+                    },
                   )
                 ]
             )

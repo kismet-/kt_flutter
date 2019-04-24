@@ -148,19 +148,14 @@ class DriverPerformanceSummary {
       };
 }
 
-ElDevents elDeventsFromJson(String str) {
-  final jsonData = json.decode(str);
-  return ElDevents.fromJson(jsonData);
-}
 
-String elDeventsToJson(ElDevents data) {
-  final dyn = data.toJson();
-  return json.encode(dyn);
-}
+ElDevents elDeventsFromJson(String str) => ElDevents.fromJson(json.decode(str));
+
+String elDeventsToJson(ElDevents data) => json.encode(data.toJson());
 
 class ElDevents {
-  String startDate;
-  String endDate;
+  DateTime startDate;
+  DateTime endDate;
   DrivingPeriodsCount drivingPeriodsCount;
   DrivingPeriodsDurations drivingPeriodsDurations;
   int eldDisconnectsCount;
@@ -174,22 +169,25 @@ class ElDevents {
   });
 
   factory ElDevents.fromJson(Map<String, dynamic> json) => new ElDevents(
-        startDate: json["start_date"],
-        endDate: json["end_date"],
-        drivingPeriodsCount:
-            DrivingPeriodsCount.fromJson(json["driving_periods_count"]),
-        drivingPeriodsDurations:
-            DrivingPeriodsDurations.fromJson(json["driving_periods_durations"]),
-        eldDisconnectsCount: json["eld_disconnects_count"],
-      );
+    startDate: DateTime.parse(json["start_date"]),
+    endDate: DateTime.parse(json["end_date"]),
+    drivingPeriodsCount: DrivingPeriodsCount.fromJson(
+        json["driving_periods_count"]),
+    drivingPeriodsDurations: DrivingPeriodsDurations.fromJson(
+        json["driving_periods_durations"]),
+    eldDisconnectsCount: json["eld_disconnects_count"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "start_date": startDate,
-        "end_date": endDate,
-        "driving_periods_count": drivingPeriodsCount.toJson(),
-        "driving_periods_durations": drivingPeriodsDurations.toJson(),
-        "eld_disconnects_count": eldDisconnectsCount,
-      };
+    "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
+        .month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(
+        2, '0')}",
+    "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
+        .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+    "driving_periods_count": drivingPeriodsCount.toJson(),
+    "driving_periods_durations": drivingPeriodsDurations.toJson(),
+    "eld_disconnects_count": eldDisconnectsCount,
+  };
 }
 
 class DrivingPeriodsCount {
@@ -211,10 +209,10 @@ class DrivingPeriodsCount {
       );
 
   Map<String, dynamic> toJson() => {
-        "all": all,
-        "unidentified": unidentified,
-        "interrupted": interrupted,
-      };
+    "all": all,
+    "unidentified": unidentified,
+    "interrupted": interrupted,
+  };
 }
 
 class DrivingPeriodsDurations {
@@ -233,10 +231,11 @@ class DrivingPeriodsDurations {
       );
 
   Map<String, dynamic> toJson() => {
-        "identified": identified,
-        "unidentified": unidentified,
-      };
+    "identified": identified,
+    "unidentified": unidentified,
+  };
 }
+
 
 Utilization utilizationFromJson(String str) {
   final jsonData = json.decode(str);
@@ -273,9 +272,9 @@ class Utilization {
 }
 
 class IdlingSummary {
-  int idleDuration;
+  double idleDuration;
   double idleFuel;
-  int motionDuration;
+  double motionDuration;
   double motionFuel;
   String startDate;
   String endDate;
@@ -291,9 +290,9 @@ class IdlingSummary {
 
   factory IdlingSummary.fromJson(Map<String, dynamic> json) =>
       new IdlingSummary(
-        idleDuration: json["idle_duration"],
+        idleDuration: json["idle_duration"].toDouble(),
         idleFuel: json["idle_fuel"].toDouble(),
-        motionDuration: json["motion_duration"],
+        motionDuration: json["motion_duration"].toDouble(),
         motionFuel: json["motion_fuel"].toDouble(),
         startDate: json["start_date"],
         endDate: json["end_date"],
@@ -390,7 +389,7 @@ class DriverLocationDriverLocation {
 }
 
 class Driver {
-  int id;
+  num id;
   String firstName;
   String lastName;
   String currentLogState;

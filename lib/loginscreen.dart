@@ -8,33 +8,6 @@ navigateToHomeScreen(context) async {
       context, MaterialPageRoute(builder: (context) => HomeScreen()));
 }
 
-// loadJson() async {
-//
-//  Logs logs = await getLogs();
-//  num logsRadialPercentage = 100 * (logs.logsCount.compliant / logs.logsCount.all);
-//  //print(logsRadialPercentage);
-//
-//  Scorecard score = await getScore();
-//  num scoreCardRadialPercentage = score.driverPerformanceSummary.totalScore;
-//  //print(scoreCardRadialPercentage);
-//
-//  ElDevents eld = await getELDevents();
-//  //print(eld.eldDisconnectsCount);
-//
-//  Utilization idle = await getUtilization();
-//  ///print(idle.idlingSummary.idleDuration);
-//
-//  Drivers drivers = await getDrivers();
-//  //print(drivers.driverLocations.first.driverLocation.lat);
-//  //print(drivers.driverLocations.first.driverLocation.lon);
-//
-//  num dates = new Logs.fromJson(logsRadialPercentage);
-//
-//  return dates;
-//}
-
-//print(dates);
-
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,7 +34,7 @@ class LoginScreen extends StatelessWidget {
             child: Text('Login'),
             onPressed: () {
               navigateToHomeScreen(context);
-            },
+            }
           )
         ],
       )),
