@@ -5,6 +5,9 @@ import 'eldcard.dart';
 import 'logauditcard.dart';
 import 'services.dart';
 import 'utilizationcard.dart';
+import 'driverscard.dart';
+import 'inspectionreportscard.dart';
+import 'recentdocumentscard.dart';
 
 Services service = new Services();
 
@@ -16,7 +19,7 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  
+
   void load() {
     setState(() {
 
@@ -33,13 +36,9 @@ class _HomeBodyState extends State<HomeBody> {
                   ScoreCard(),
                   ELDCard(),
                   UtilizationCard(),
-                  RaisedButton(
-                    textColor: Colors.blue,
-                    child: Text('Login'),
-                    onPressed: () {
-                      load();
-                    },
-                  )
+                  DriversCard(),
+                  InspectionReportsCard(),
+                  RecentDocumentsCard(),
                 ]
             )
         )

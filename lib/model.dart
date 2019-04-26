@@ -448,3 +448,148 @@ class DutyStatusCount {
         "waiting": waiting,
       };
 }
+
+Dvir dvirFromJson(String str) => Dvir.fromJson(json.decode(str));
+
+String dvirToJson(Dvir data) => json.encode(data.toJson());
+
+class Dvir {
+  DateTime startDate;
+  DateTime endDate;
+  DvirsCount dvirsCount;
+
+  Dvir({
+    this.startDate,
+    this.endDate,
+    this.dvirsCount,
+  });
+
+  factory Dvir.fromJson(Map<String, dynamic> json) =>
+      new Dvir(
+        startDate: DateTime.parse(json["start_date"]),
+        endDate: DateTime.parse(json["end_date"]),
+        dvirsCount: DvirsCount.fromJson(json["dvirs_count"]),
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
+            .month.toString().padLeft(2, '0')}-${startDate.day.toString()
+            .padLeft(2, '0')}",
+        "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
+            .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(
+            2, '0')}",
+        "dvirs_count": dvirsCount.toJson(),
+      };
+}
+
+class DvirsCount {
+  int all;
+  int unknown;
+  int withNoDefects;
+  int satisfactory;
+  int harmless;
+  int corrected;
+
+  DvirsCount({
+    this.all,
+    this.unknown,
+    this.withNoDefects,
+    this.satisfactory,
+    this.harmless,
+    this.corrected,
+  });
+
+  factory DvirsCount.fromJson(Map<String, dynamic> json) =>
+      new DvirsCount(
+        all: json["all"],
+        unknown: json["unknown"],
+        withNoDefects: json["with_no_defects"],
+        satisfactory: json["satisfactory"],
+        harmless: json["harmless"],
+        corrected: json["corrected"],
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "all": all,
+        "unknown": unknown,
+        "with_no_defects": withNoDefects,
+        "satisfactory": satisfactory,
+        "harmless": harmless,
+        "corrected": corrected,
+      };
+}
+
+Documents documentsFromJson(String str) => Documents.fromJson(json.decode(str));
+
+String documentsToJson(Documents data) => json.encode(data.toJson());
+
+class Documents {
+  DateTime startDate;
+  DateTime endDate;
+  DocsCount docsCount;
+
+  Documents({
+    this.startDate,
+    this.endDate,
+    this.docsCount,
+  });
+
+  factory Documents.fromJson(Map<String, dynamic> json) =>
+      new Documents(
+        startDate: DateTime.parse(json["start_date"]),
+        endDate: DateTime.parse(json["end_date"]),
+        docsCount: DocsCount.fromJson(json["docs_count"]),
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
+            .month.toString().padLeft(2, '0')}-${startDate.day.toString()
+            .padLeft(2, '0')}",
+        "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
+            .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(
+            2, '0')}",
+        "docs_count": docsCount.toJson(),
+      };
+}
+
+class DocsCount {
+  int billOfLading;
+  int fuelReceipt;
+  int accidentPhoto;
+  int citation;
+  int scaleTicket;
+  int other;
+
+  DocsCount({
+    this.billOfLading,
+    this.fuelReceipt,
+    this.accidentPhoto,
+    this.citation,
+    this.scaleTicket,
+    this.other,
+  });
+
+  factory DocsCount.fromJson(Map<String, dynamic> json) =>
+      new DocsCount(
+        billOfLading: json["bill of lading"],
+        fuelReceipt: json["fuel receipt"],
+        accidentPhoto: json["accident photo"],
+        citation: json["citation"],
+        scaleTicket: json["scale ticket"],
+        other: json["other"],
+      );
+
+  Map<String, dynamic> toJson() =>
+      {
+        "bill of lading": billOfLading,
+        "fuel receipt": fuelReceipt,
+        "accident photo": accidentPhoto,
+        "citation": citation,
+        "scale ticket": scaleTicket,
+        "other": other,
+      };
+}
+

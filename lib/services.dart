@@ -63,6 +63,28 @@ class Services {
     return driversFromJson(responseDrivers.body);
   }
 
+  Future<Dvir> getDvirs() async {
+    final responseDvirs = await http.get(
+        'https://api.keeptruckin.com/api/w2/overview/dvirs', headers: {
+      'X-Web-User-Auth':
+      'P6n4a8jy0SxzR2p6ji0V9ft4kcIyUD869kxVfG7UiCI1zSnL+ACwYhhvMAHPMaZZ',
+      'Authorization':
+      'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
+    });
+    return dvirFromJson(responseDvirs.body);
+  }
+
+  Future<Documents> getDocuments() async {
+    final responseDocuments = await http.get(
+        'https://api.keeptruckin.com/api/w2/overview/docs', headers: {
+      'X-Web-User-Auth':
+      'P6n4a8jy0SxzR2p6ji0V9ft4kcIyUD869kxVfG7UiCI1zSnL+ACwYhhvMAHPMaZZ',
+      'Authorization':
+      'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
+    });
+    return documentsFromJson(responseDocuments.body);
+  }
+
   String convertDate(String date) {
     List splits = date.split("-");
 

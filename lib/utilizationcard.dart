@@ -124,9 +124,13 @@ class UtilizationCardState extends State<UtilizationCard>
                                   future: _utilization,
                                   builder: (context, snapshot) {
                                     if (snapshot.hasData) {
+                                      print((snapshot.data.idlingSummary
+                                          .idleDuration /
+                                          snapshot.data.idlingSummary
+                                              .idleDuration));
                                       return CircularProgressIndicator(
                                         value: (snapshot.data.idlingSummary
-                                                .idleDuration /
+                                            .idleDuration /
                                             snapshot.data.idlingSummary
                                                 .motionDuration),
                                       );
@@ -176,41 +180,55 @@ class UtilizationCardState extends State<UtilizationCard>
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
-                                        Text("Idle Time",
-                                            style: TextStyle(
-                                                fontSize: 10.5,
-                                                fontWeight: FontWeight.w200),
-                                            textAlign: TextAlign.left)
-                                      ],
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Text(
-                                          "Idle time",
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.grey),
+                                        Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Text("Idle Time",
+                                              style: TextStyle(
+                                                  fontSize: 10.5,
+                                                  fontWeight: FontWeight.w200),
+                                              textAlign: TextAlign.left),
                                         )
                                       ],
                                     ),
                                     Row(
                                       children: <Widget>[
-                                        Text("Driving Time",
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 15.0),
+                                          child: Text(
+                                            "Idle Fuel",
                                             style: TextStyle(
-                                                fontSize: 10.5,
-                                                fontWeight: FontWeight.w200),
-                                            textAlign: TextAlign.left)
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w200,
+                                                color: Colors.grey),
+                                          ),
+                                        )
                                       ],
                                     ),
                                     Row(
                                       children: <Widget>[
-                                        Text(
-                                          "Drivng Fuel",
-                                          style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w200,
-                                              color: Colors.grey),
+                                        Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Text("Driving Time",
+                                              style: TextStyle(
+                                                  fontSize: 10.5,
+                                                  fontWeight: FontWeight.w200),
+                                              textAlign: TextAlign.left),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 20.0),
+                                          child: Text(
+                                            "Drivng Fuel",
+                                            style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w200,
+                                                color: Colors.grey),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -227,21 +245,24 @@ class UtilizationCardState extends State<UtilizationCard>
                                           future: _utilization,
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
+                                              num minutes = (snapshot
+                                                  .data
+                                                  .idlingSummary
+                                                  .idleDuration / 60).toInt();
+                                              num hours = (minutes / 60)
+                                                  .toInt();
+                                              minutes = minutes % 60;
                                               return Padding(
                                                   padding:
-                                                      const EdgeInsets.all(0.0),
+                                                  const EdgeInsets.all(0.0),
                                                   child: Text(
-                                                      snapshot
-                                                          .data
-                                                          .idlingSummary
-                                                          .idleDuration
-                                                          .toString(),
+                                                      "$hours hrs $minutes mins",
                                                       style: TextStyle(
                                                           fontSize: 10,
                                                           fontWeight:
-                                                              FontWeight.w200),
+                                                          FontWeight.w200),
                                                       textAlign:
-                                                          TextAlign.right));
+                                                      TextAlign.right));
                                             } else {
                                               return Padding(
                                                 padding:
@@ -260,11 +281,13 @@ class UtilizationCardState extends State<UtilizationCard>
                                             if (snapshot.hasData) {
                                               return Padding(
                                                   padding:
-                                                      const EdgeInsets.all(0.0),
+                                                  const EdgeInsets.only(
+                                                      bottom: 15.0),
                                                   child: Text(
-                                                    snapshot.data.idlingSummary
-                                                        .idleFuel
-                                                        .toString(),
+                                                    (snapshot.data.idlingSummary
+                                                        .idleFuel / 3.785411784)
+                                                        .toStringAsFixed(2) +
+                                                        " gal",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:
@@ -286,20 +309,28 @@ class UtilizationCardState extends State<UtilizationCard>
                                       FutureBuilder<Utilization>(
                                           future: _utilization,
                                           builder: (context, snapshot) {
+                                            num minutes = (snapshot
+                                                .data
+                                                .idlingSummary
+                                                .motionDuration / 60).toInt();
+                                            num hours = (minutes / 60).toInt();
+                                            minutes = minutes % 60;
                                             if (snapshot.hasData) {
-                                              return Text(
-                                                  snapshot.data.idlingSummary
-                                                      .motionDuration
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.w200),
-                                                  textAlign: TextAlign.right);
+                                              return Padding(
+                                                padding: const EdgeInsets.all(
+                                                    0.0),
+                                                child: Text(
+                                                    "$hours hrs $minutes mins",
+                                                    style: TextStyle(
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                        FontWeight.w200),
+                                                    textAlign: TextAlign.right),
+                                              );
                                             } else {
                                               return Padding(
                                                 padding:
-                                                    const EdgeInsets.all(0.0),
+                                                const EdgeInsets.all(0.0),
                                                 child: Text(" "),
                                               );
                                             }
@@ -312,14 +343,20 @@ class UtilizationCardState extends State<UtilizationCard>
                                           future: _utilization,
                                           builder: (context, snapshot) {
                                             if (snapshot.hasData) {
-                                              return Text(
-                                                snapshot.data.idlingSummary
-                                                    .motionFuel
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w200,
-                                                    color: Colors.grey),
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 20.0),
+                                                child: Text(
+                                                  (snapshot.data.idlingSummary
+                                                      .motionFuel / 3.785411784)
+                                                      .toStringAsFixed(2) +
+                                                      " gal",
+                                                  style: TextStyle(
+                                                      fontSize: 10,
+                                                      fontWeight: FontWeight
+                                                          .w200,
+                                                      color: Colors.grey),
+                                                ),
                                               );
                                             } else {
                                               return Padding(
