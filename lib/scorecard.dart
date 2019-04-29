@@ -3,25 +3,12 @@ import 'package:flutter/material.dart';
 import 'model.dart';
 import 'services.dart';
 
-Services service = new Services();
+Services service = Services();
 
-class ScoreCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ScoreCardState();
-  }
-}
+class ScoreCard extends StatelessWidget {
+  final Scorecard score;
 
-class ScoreCardState extends State<ScoreCard>
-    with AutomaticKeepAliveClientMixin<ScoreCard> {
-  bool get wantKeepAlive => true;
-
-  Future<Logs> _logs = service.getLogs();
-  Future<Scorecard> _score = service.getScore();
-
-  void load() {
-    setState(() {});
-  }
+  ScoreCard({@required this.score});
 
   @override
   Widget build(BuildContext context) {
@@ -69,25 +56,17 @@ class ScoreCardState extends State<ScoreCard>
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))),
             child: Center(
               // ---------------  Date is returned here from API via Future-----------------\\
-              child: FutureBuilder<Logs>(
-                  future: _logs,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return Text("");
-                    } else {
-                      return Text(
-                          service.convertDate(snapshot.data.startDate) +
+                child: Text(
+                    service.convertDate(score.startDate) +
                               " - " +
                               service.convertDate(
-                                snapshot.data.endDate,
+                                score.endDate,
                               ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w200,
-                              color: Colors.grey));
-                    }
-                  }),
+                              color: Colors.grey))
             ),
           ),
         ),
@@ -120,42 +99,21 @@ class ScoreCardState extends State<ScoreCard>
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                              child: FutureBuilder<Scorecard>(
-                                  future: _score,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.data == null) {
-                                      return CircularProgressIndicator(
-                                        value: 0,
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator(
-                                        value: (snapshot
-                                                .data
-                                                .driverPerformanceSummary
+                                child: CircularProgressIndicator(
+                                  value: (score.driverPerformanceSummary
                                                 .totalScore /
                                             100),
-                                      );
-                                    }
-                                  }),
+                                )
                             ),
                           )),
                       Positioned(
                           top: 75,
                           left: 162,
-                          child: FutureBuilder<Scorecard>(
-                              future: _score,
-                              builder: (context, snapshot) {
-                                if (snapshot.data == null) {
-                                  return Text("");
-                                } else {
-                                  return Text((snapshot
-                                              .data
-                                              .driverPerformanceSummary
-                                              .totalScore)
+                          child: Text(
+                              (score.driverPerformanceSummary.totalScore)
                                           .toStringAsFixed(0) +
-                                      "%");
-                                }
-                              })),
+                                  "%")
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -219,18 +177,8 @@ class ScoreCardState extends State<ScoreCard>
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Scorecard>(
-                                          future: _score,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.data == null) {
-                                              return Text("");
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: Text(
-                                                    snapshot
-                                                        .data
+                                      Text(
+                                          score
                                                         .driverPerformanceSummary
                                                         .numHardAccels
                                                         .toString(),
@@ -239,9 +187,6 @@ class ScoreCardState extends State<ScoreCard>
                                                         fontWeight:
                                                             FontWeight.w200),
                                                     textAlign: TextAlign.right),
-                                              );
-                                            }
-                                          })
                                     ],
                                   ),
                                   Row(
@@ -257,19 +202,8 @@ class ScoreCardState extends State<ScoreCard>
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Scorecard>(
-                                          future: _score,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.data == null) {
-                                              return Text("");
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: Text(
-                                                    snapshot
-                                                        .data
-                                                        .driverPerformanceSummary
+                                      Text(
+                                          score.driverPerformanceSummary
                                                         .numHardBrakes
                                                         .toString(),
                                                     style: TextStyle(
@@ -277,9 +211,6 @@ class ScoreCardState extends State<ScoreCard>
                                                         fontWeight:
                                                             FontWeight.w200),
                                                     textAlign: TextAlign.right),
-                                              );
-                                            }
-                                          })
                                     ],
                                   ),
                                   Row(
@@ -295,25 +226,15 @@ class ScoreCardState extends State<ScoreCard>
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Scorecard>(
-                                          future: _score,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.data == null) {
-                                              return Text("");
-                                            } else {
-                                              return Text(
-                                                  snapshot
-                                                      .data
-                                                      .driverPerformanceSummary
-                                                      .numHardCorners
+                                      Text(
+                                          score.driverPerformanceSummary
+                                              .numHardCorners
                                                       .toString(),
                                                   style: TextStyle(
                                                       fontSize: 10,
                                                       fontWeight:
                                                           FontWeight.w200),
-                                                  textAlign: TextAlign.right);
-                                            }
-                                          })
+                                          textAlign: TextAlign.right)
                                     ],
                                   ),
                                   Row(

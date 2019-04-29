@@ -11,12 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  void load() {
-    setState(() {});
-  }
-
   final topBar = new AppBar(
-   // backgroundColor: Color(0),
     centerTitle: true,
     elevation: 1,
     actions: <Widget>[
@@ -56,13 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.pop(context);
                     },
                   ),
-                  RaisedButton(
-                    textColor: Colors.blue,
-                    child: Text('Login'),
-                    onPressed: () {
-                      load();
-                    },
-                  )
                 ],
               ),
           )

@@ -5,25 +5,10 @@ import 'services.dart';
 
 Services service = new Services();
 
-class ELDCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ELDCardState();
-  }
-}
+class ELDCard extends StatelessWidget {
+  final ElDevents eld;
 
-class ELDCardState extends State<ELDCard>
-    with AutomaticKeepAliveClientMixin<ELDCard> {
-  bool get wantKeepAlive => true;
-  double radialPercentageCache = 0;
-
-  Future<Logs> _logs =
-      service.getLogs(); // All cards must have to retreive date.
-  Future<ElDevents> _eld = service.getELDevents();
-
-  void load() {
-    setState(() {});
-  }
+  ELDCard({@required this.eld});
 
   @override
   Widget build(BuildContext context) {
@@ -71,25 +56,17 @@ class ELDCardState extends State<ELDCard>
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))),
             child: Center(
               // ---------------  Date is returned here from API via Future-----------------\\
-              child: FutureBuilder<Logs>(
-                  future: _logs,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return Text("");
-                    } else {
-                      return Text(
-                          service.convertDate(snapshot.data.startDate) +
+                child: Text(
+                    service.convertDate(eld.startDate) +
                               " - " +
                               service.convertDate(
-                                snapshot.data.endDate,
+                                eld.endDate,
                               ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w200,
-                              color: Colors.grey));
-                    }
-                  }),
+                              color: Colors.grey))
             ),
           ),
         ),
@@ -120,47 +97,21 @@ class ELDCardState extends State<ELDCard>
                             width: 70.0,
                             height: 70.0,
                             // ------------------  Card Radial Percentage -----------------\\
-                            child: FutureBuilder<ElDevents>(
-                                future: _eld,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return CircularProgressIndicator(
+                              child: CircularProgressIndicator(
                                       value: 1 -
-                                          snapshot.data.drivingPeriodsCount
-                                                  .unidentified /
-                                              snapshot
-                                                  .data.drivingPeriodsCount.all,
-                                    );
-                                  } else {
-                                    print(snapshot.data);
-                                    return CircularProgressIndicator(
-                                      value: 0,
-                                    );
-                                  }
-                                }),
+                                          eld.drivingPeriodsCount.unidentified /
+                                              eld.drivingPeriodsCount.all,
+                              )
                           ),
                         )),
                     Positioned(
                         top: 75,
                         left: 162,
-                        child: FutureBuilder<ElDevents>(
-                            future: _eld,
-                            builder: (context, snapshot) {
-                              if (snapshot.data == null) {
-                                return Text("");
-                              } else {
-                                return Text((100 -
-                                            (100 *
-                                                snapshot
-                                                    .data
-                                                    .drivingPeriodsCount
-                                                    .unidentified /
-                                                snapshot.data
-                                                    .drivingPeriodsCount.all))
-                                        .toStringAsFixed(0) +
-                                    "%");
-                              }
-                            })),
+                        child: Text((100 -
+                            (100 * eld.drivingPeriodsCount.unidentified /
+                                eld.drivingPeriodsCount.all)).toStringAsFixed(
+                            0) + "%")
+                    ),
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: Center(
@@ -215,67 +166,37 @@ class ELDCardState extends State<ELDCard>
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          FutureBuilder<ElDevents>(
-                              future: _eld,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  int minutes = (snapshot
-                                              .data
-                                              .drivingPeriodsDurations
-                                              .identified /
-                                          60)
-                                      .toInt();
-                                  int hours = (minutes / 60).toInt();
-                                  minutes = minutes % 60;
-                                  return Padding(
+                          Padding(
                                     padding: const EdgeInsets.only(
                                         bottom: 0.0, right: 0),
-                                    child: Text("$hours hrs $minutes mins",
+                            child: Text(
+                                ((eld.drivingPeriodsDurations.identified ~/
+                                    60) ~/ 60).toString() + " hrs" +
+                                    ((eld.drivingPeriodsDurations.identified ~/
+                                        60) % 60).toString() + " mins",
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w200),
                                         textAlign: TextAlign.right),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Text(""),
-                                  );
-                                }
-                              })
+                          )
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          FutureBuilder<ElDevents>(
-                              future: _eld,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  int minutes = (snapshot
-                                              .data
-                                              .drivingPeriodsDurations
-                                              .unidentified
-                                              .toInt() /
-                                          60)
-                                      .toInt();
-                                  int hours = (minutes / 60).toInt();
-                                  minutes = minutes % 60;
-                                  return Padding(
+                          Padding(
                                     padding: const EdgeInsets.only(
                                         bottom: 00.0, right: 0),
-                                    child: Text("$hours hrs $minutes mins",
+                            child: Text(
+                                ((eld.drivingPeriodsDurations.unidentified ~/
+                                    60) ~/ 60).toString() + " hrs" +
+                                    ((eld.drivingPeriodsDurations
+                                        .unidentified ~/ 60) % 60).toString() +
+                                    " mins",
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w200),
                                         textAlign: TextAlign.right),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Text(""),
-                                  );
-                                }
-                              })
+                          )
                         ],
                       ),
                     ],
@@ -286,44 +207,27 @@ class ELDCardState extends State<ELDCard>
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          FutureBuilder<ElDevents>(
-                              future: _eld,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Padding(
+                          Padding(
                                     padding: const EdgeInsets.only(left: 8),
                                     child: Text(
-                                        (snapshot.data.drivingPeriodsCount.all -
-                                                    snapshot
-                                                        .data
-                                                        .drivingPeriodsCount
-                                                        .unidentified)
+                                        (eld.drivingPeriodsCount.all -
+                                            eld.drivingPeriodsCount
+                                                .unidentified)
                                                 .toString() +
                                             " events",
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w200),
                                         textAlign: TextAlign.right),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Text(""),
-                                  );
-                                }
-                              })
+                          )
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          FutureBuilder<ElDevents>(
-                              future: _eld,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Padding(
+                          Padding(
                                     padding: const EdgeInsets.only(bottom: 0),
                                     child: Text(
-                                        snapshot.data.drivingPeriodsCount
+                                        eld.drivingPeriodsCount
                                                 .unidentified
                                                 .toString() +
                                             " events",
@@ -331,14 +235,7 @@ class ELDCardState extends State<ELDCard>
                                             fontSize: 10,
                                             fontWeight: FontWeight.w200),
                                         textAlign: TextAlign.right),
-                                  );
-                                } else {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Text(""),
-                                  );
-                                }
-                              }),
+                          )
                         ],
                       ),
                     ],
@@ -350,43 +247,24 @@ class ELDCardState extends State<ELDCard>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                FutureBuilder<ElDevents>(
-                    future: _eld,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 0.0),
-                          child: Text(
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 0.0),
+                  child: Text(
                               "Interrupted Driving Events: " +
-                                  snapshot.data.drivingPeriodsCount.interrupted
+                                  eld.drivingPeriodsCount.interrupted
                                       .toString(),
                               style: TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.w200),
                               textAlign: TextAlign.right),
-                        );
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: Text(""),
-                        );
-                      }
-                    }),
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
-                  child: FutureBuilder<ElDevents>(
-                      future: _eld,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
+                  child: Text(
                               "ELD Disconnects: " +
-                                  snapshot.data.eldDisconnectsCount.toString(),
+                                  eld.eldDisconnectsCount.toString(),
                               style: TextStyle(
                                   fontSize: 10, fontWeight: FontWeight.w200),
-                              textAlign: TextAlign.right);
-                        } else {
-                          Text("");
-                        }
-                      }),
+                      textAlign: TextAlign.right),
                 )
               ],
             ),

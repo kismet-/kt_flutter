@@ -5,22 +5,10 @@ import 'services.dart';
 
 Services service = new Services();
 
-class InspectionReportsCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return InspectionReportsCardState();
-  }
-}
+class InspectionReportsCard extends StatelessWidget {
+  final Dvir dvir;
 
-class InspectionReportsCardState extends State<InspectionReportsCard>
-    with AutomaticKeepAliveClientMixin<InspectionReportsCard> {
-  bool get wantKeepAlive => true;
-
-  Future<Dvir> _dvirs = service.getDvirs();
-
-  void load() {
-    setState(() {});
-  }
+  InspectionReportsCard({@required this.dvir});
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +56,18 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))),
             child: Center(
               // ---------------  Date is returned here from API via Future-----------------\\
-              child: FutureBuilder<Dvir>(
-                  future: _dvirs,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(
+                child: Text(
                         service.convertDate(
-                                snapshot.data.startDate.toString()) +
+                            dvir.startDate) +
                             " - " +
                             service
-                                .convertDate(snapshot.data.endDate.toString()),
+                                .convertDate(dvir.endDate),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w200,
                             color: Colors.grey),
-                      );
-                    } else {
-                      return Text("");
-                    }
-                  }),
+                )
             ),
           ),
         ),
@@ -120,42 +100,21 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                              child: FutureBuilder<Dvir>(
-                                  future: _dvirs,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return CircularProgressIndicator(
-                                        value: (snapshot
-                                                .data.dvirsCount.withNoDefects /
-                                            snapshot.data.dvirsCount.all),
+                                child: CircularProgressIndicator(
+                                  value: (dvir.dvirsCount.withNoDefects /
+                                      dvir.dvirsCount.all),
                                         backgroundColor: Colors.blue,
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator(
-                                        value: 0,
-                                      );
-                                    }
-                                  }),
+                                )
                             ),
                           )),
                       Positioned(
                           top: 75,
                           left: 162,
-                          child: FutureBuilder<Dvir>(
-                              future: _dvirs,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                      ((snapshot.data.dvirsCount.withNoDefects /
-                                                      snapshot.data.dvirsCount
-                                                          .all) *
-                                                  100)
-                                              .toStringAsFixed(0) +
-                                          "%");
-                                } else {
-                                  return Text("");
-                                }
-                              })),
+                          child: Text(
+                              ((dvir.dvirsCount.withNoDefects /
+                                  dvir.dvirsCount.all) * 100).toStringAsFixed(
+                                  0) + "%")
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -179,30 +138,16 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                                           fontSize: 10.5,
                                           fontWeight: FontWeight.w200)),
                                 ),
-                                FutureBuilder<Dvir>(
-                                    future: _dvirs,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return Container(
-                                          height: 25,
-                                          width: 337 / 2,
-                                          child: Text(
-                                              snapshot
-                                                  .data.dvirsCount.withNoDefects
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 10.5,
-                                                  fontWeight: FontWeight.w200),
-                                              textAlign: TextAlign.right),
-                                        );
-                                      } else {
-                                        return Container(
-                                          height: 25,
-                                          width: 337 / 2,
-                                          child: Text(""),
-                                        );
-                                      }
-                                    }),
+                                Container(
+                                  height: 25,
+                                  width: 337 / 2,
+                                  child: Text(
+                                      dvir.dvirsCount.withNoDefects.toString(),
+                                      style: TextStyle(
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w200),
+                                      textAlign: TextAlign.right),
+                                )
                               ]),
                               Row(
                                 children: <Widget>[
@@ -215,31 +160,19 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Dvir>(
-                                      future: _dvirs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 337 / 2,
-                                            child: Text(
-                                                snapshot
-                                                    .data.dvirsCount.corrected
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 337 / 2,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 337 / 2,
+                                    child: Text(
+                                        dvir.dvirsCount.corrected.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight:
+                                            FontWeight.w200
+                                        ),
+                                        textAlign: TextAlign.right
+                                    ),
+                                  )
                                 ],
                               ),
                               Row(
@@ -253,31 +186,17 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Dvir>(
-                                      future: _dvirs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot
-                                                    .data.dvirsCount.harmless
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(
+                                        dvir.dvirsCount.harmless.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight:
+                                            FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                               Row(
@@ -291,30 +210,17 @@ class InspectionReportsCardState extends State<InspectionReportsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Dvir>(
-                                      future: _dvirs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot.data.dvirsCount.unknown
-                                                    .toString(),
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(
+                                        dvir.dvirsCount.unknown.toString(),
                                                 style: TextStyle(
                                                     fontSize: 10.5,
                                                     fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                                    FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                             ],

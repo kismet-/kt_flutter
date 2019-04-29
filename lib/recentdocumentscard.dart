@@ -5,22 +5,10 @@ import 'services.dart';
 
 Services service = new Services();
 
-class RecentDocumentsCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return RecentDocumentsCardState();
-  }
-}
+class RecentDocumentsCard extends StatelessWidget {
+  final Documents docs;
 
-class RecentDocumentsCardState extends State<RecentDocumentsCard>
-    with AutomaticKeepAliveClientMixin<RecentDocumentsCard> {
-  bool get wantKeepAlive => true;
-
-  Future<Documents> _docs = service.getDocuments();
-
-  void load() {
-    setState(() {});
-  }
+  RecentDocumentsCard({@required this.docs});
 
   @override
   Widget build(BuildContext context) {
@@ -68,26 +56,15 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))),
             child: Center(
               // ---------------  Date is returned here from API via Future-----------------\\
-              child: FutureBuilder<Documents>(
-                  future: _docs,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Text(
-                        service.convertDate(
-                                snapshot.data.startDate.toString()) +
-                            " - " +
-                            service
-                                .convertDate(snapshot.data.endDate.toString()),
+                child: Text(service.convertDate(docs.startDate) + " - " +
+                    service.convertDate(docs.endDate),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w200,
-                            color: Colors.grey),
-                      );
-                    } else {
-                      return Text("");
-                    }
-                  }),
+                            color: Colors.grey
+                        ),
+                )
             ),
           ),
         ),
@@ -120,35 +97,17 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                              child: FutureBuilder<Documents>(
-                                  future: _docs,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return CircularProgressIndicator(
-                                        value: (0),
+                                child: CircularProgressIndicator(
+                                  value: (100),
                                         backgroundColor: Colors.blue,
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator(
-                                        value: 0,
-                                      );
-                                    }
-                                  }),
+                                )
                             ),
                           )),
                       Positioned(
                           top: 75,
                           left: 162,
-                          child: FutureBuilder<Documents>(
-                              future: _docs,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                      ((0) * 100).toStringAsFixed(0) + "%");
-                                } else {
-                                  return Text("");
-                                }
-                              })),
+                          child: Text(((0) * 100).toStringAsFixed(0) + "%")
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -172,30 +131,16 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                           fontSize: 10.5,
                                           fontWeight: FontWeight.w200)),
                                 ),
-                                FutureBuilder<Documents>(
-                                    future: _docs,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        return Container(
+                                Container(
                                           height: 25,
                                           width: 337 / 2,
-                                          child: Text(
-                                              snapshot
-                                                  .data.docsCount.billOfLading
+                                  child: Text(docs.docsCount.billOfLading
                                                   .toString(),
                                               style: TextStyle(
                                                   fontSize: 10.5,
                                                   fontWeight: FontWeight.w200),
                                               textAlign: TextAlign.right),
-                                        );
-                                      } else {
-                                        return Container(
-                                          height: 25,
-                                          width: 337 / 2,
-                                          child: Text(""),
-                                        );
-                                      }
-                                    }),
+                                ),
                               ]),
                               Row(
                                 children: <Widget>[
@@ -208,31 +153,17 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Documents>(
-                                      future: _docs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 337 / 2,
-                                            child: Text(
-                                                snapshot
-                                                    .data.docsCount.fuelReceipt
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 337 / 2,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 337 / 2,
+                                    child: Text(
+                                        docs.docsCount.fuelReceipt.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight:
+                                            FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                               Row(
@@ -246,31 +177,17 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Documents>(
-                                      future: _docs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot.data.docsCount
-                                                    .accidentPhoto
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(
+                                        docs.docsCount.accidentPhoto.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight:
+                                            FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                               Row(
@@ -284,30 +201,17 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Documents>(
-                                      future: _docs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot.data.docsCount.citation
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(
+                                        docs.docsCount.citation.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight:
+                                            FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                               Row(
@@ -321,31 +225,16 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Documents>(
-                                      future: _docs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot
-                                                    .data.docsCount.scaleTicket
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(
+                                        docs.docsCount.scaleTicket.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                               Row(
@@ -359,34 +248,20 @@ class RecentDocumentsCardState extends State<RecentDocumentsCard>
                                             fontSize: 10.5,
                                             fontWeight: FontWeight.w200),
                                       )),
-                                  FutureBuilder<Documents>(
-                                      future: _docs,
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          return Container(
-                                            height: 25,
-                                            width: 167,
-                                            child: Text(
-                                                snapshot.data.docsCount.other
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    fontSize: 10.5,
-                                                    fontWeight:
-                                                        FontWeight.w200),
-                                                textAlign: TextAlign.right),
-                                          );
-                                        } else {
-                                          return Container(
-                                            height: 25,
-                                            width: 187,
-                                            child: Text(""),
-                                          );
-                                        }
-                                      })
+                                  Container(
+                                    height: 25,
+                                    width: 167,
+                                    child: Text(docs.docsCount.other.toString(),
+                                        style: TextStyle(
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.w200),
+                                        textAlign: TextAlign.right),
+                                  )
                                 ],
                               ),
                             ],
-                          ))
+                          )
+                      )
                     ],
                   ),
                 ),

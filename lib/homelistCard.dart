@@ -42,10 +42,6 @@ class HomeListCardState extends State<HomeListCard>
 
   Future<Logs> _logs = service.getLogs();
 
-  void load() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(

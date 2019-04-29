@@ -154,8 +154,8 @@ ElDevents elDeventsFromJson(String str) => ElDevents.fromJson(json.decode(str));
 String elDeventsToJson(ElDevents data) => json.encode(data.toJson());
 
 class ElDevents {
-  DateTime startDate;
-  DateTime endDate;
+  String startDate;
+  String endDate;
   DrivingPeriodsCount drivingPeriodsCount;
   DrivingPeriodsDurations drivingPeriodsDurations;
   int eldDisconnectsCount;
@@ -169,8 +169,8 @@ class ElDevents {
   });
 
   factory ElDevents.fromJson(Map<String, dynamic> json) => new ElDevents(
-    startDate: DateTime.parse(json["start_date"]),
-    endDate: DateTime.parse(json["end_date"]),
+    startDate: json["start_date"],
+    endDate: json["end_date"],
     drivingPeriodsCount: DrivingPeriodsCount.fromJson(
         json["driving_periods_count"]),
     drivingPeriodsDurations: DrivingPeriodsDurations.fromJson(
@@ -179,11 +179,8 @@ class ElDevents {
   );
 
   Map<String, dynamic> toJson() => {
-    "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
-        .month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(
-        2, '0')}",
-    "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
-        .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
+    "start_date": startDate,
+    "end_date": endDate,
     "driving_periods_count": drivingPeriodsCount.toJson(),
     "driving_periods_durations": drivingPeriodsDurations.toJson(),
     "eld_disconnects_count": eldDisconnectsCount,
@@ -454,8 +451,8 @@ Dvir dvirFromJson(String str) => Dvir.fromJson(json.decode(str));
 String dvirToJson(Dvir data) => json.encode(data.toJson());
 
 class Dvir {
-  DateTime startDate;
-  DateTime endDate;
+  String startDate;
+  String endDate;
   DvirsCount dvirsCount;
 
   Dvir({
@@ -466,19 +463,15 @@ class Dvir {
 
   factory Dvir.fromJson(Map<String, dynamic> json) =>
       new Dvir(
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: json["start_date"],
+        endDate: json["end_date"],
         dvirsCount: DvirsCount.fromJson(json["dvirs_count"]),
       );
 
   Map<String, dynamic> toJson() =>
       {
-        "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
-            .month.toString().padLeft(2, '0')}-${startDate.day.toString()
-            .padLeft(2, '0')}",
-        "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
-            .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(
-            2, '0')}",
+        "start_date": startDate,
+        "end_date": endDate,
         "dvirs_count": dvirsCount.toJson(),
       };
 }
@@ -526,8 +519,8 @@ Documents documentsFromJson(String str) => Documents.fromJson(json.decode(str));
 String documentsToJson(Documents data) => json.encode(data.toJson());
 
 class Documents {
-  DateTime startDate;
-  DateTime endDate;
+  String startDate;
+  String endDate;
   DocsCount docsCount;
 
   Documents({
@@ -538,19 +531,15 @@ class Documents {
 
   factory Documents.fromJson(Map<String, dynamic> json) =>
       new Documents(
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: json["start_date"],
+        endDate: json["end_date"],
         docsCount: DocsCount.fromJson(json["docs_count"]),
       );
 
   Map<String, dynamic> toJson() =>
       {
-        "start_date": "${startDate.year.toString().padLeft(4, '0')}-${startDate
-            .month.toString().padLeft(2, '0')}-${startDate.day.toString()
-            .padLeft(2, '0')}",
-        "end_date": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month
-            .toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(
-            2, '0')}",
+        "start_date": startDate,
+        "end_date": endDate,
         "docs_count": docsCount.toJson(),
       };
 }

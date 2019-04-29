@@ -5,6 +5,13 @@ import 'package:http/http.dart' as http;
 import 'model.dart';
 
 class Services {
+  static final Services _services = new Services._internal();
+
+  factory Services() {
+    return _services;
+  }
+
+  Services._internal();
 
   Future<Logs> getLogs() async {
     final responseLogs = await http
@@ -14,6 +21,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getLogs fired");
     return logsFromJson(responseLogs.body);
   }
 
@@ -26,6 +34,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getScore fired");
     return scorecardFromJson(responseScore.body);
   }
 
@@ -38,6 +47,7 @@ class Services {
           'Authorization':
           'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
         });
+    print("---------getELD fired");
     return elDeventsFromJson(responseELDevents.body);
   }
 
@@ -49,6 +59,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getUtilization fired");
     return utilizationFromJson(responseUtilization.body);
   }
 
@@ -60,6 +71,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getDrivers fired");
     return driversFromJson(responseDrivers.body);
   }
 
@@ -71,6 +83,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getDVIR fired");
     return dvirFromJson(responseDvirs.body);
   }
 
@@ -82,6 +95,7 @@ class Services {
       'Authorization':
       'Basic a3RfZGFzaGJvYXJkX2F1dGg6RFQyOUp6c3JDY3V3MVh1MVg4TEg='
     });
+    print("---------getDocuments fired");
     return documentsFromJson(responseDocuments.body);
   }
 

@@ -5,23 +5,10 @@ import 'services.dart';
 
 Services service = new Services();
 
-class UtilizationCard extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return UtilizationCardState();
-  }
-}
+class UtilizationCard extends StatelessWidget {
+  final Utilization utilization;
 
-class UtilizationCardState extends State<UtilizationCard>
-    with AutomaticKeepAliveClientMixin<UtilizationCard> {
-  bool get wantKeepAlive => true;
-
-  Future<Logs> _logs = service.getLogs();
-  Future<Utilization> _utilization = service.getUtilization();
-
-  void load() {
-    setState(() {});
-  }
+  UtilizationCard({@required this.utilization});
 
   @override
   Widget build(BuildContext context) {
@@ -69,25 +56,17 @@ class UtilizationCardState extends State<UtilizationCard>
                     topLeft: Radius.circular(4), topRight: Radius.circular(4))),
             child: Center(
               // ---------------  Date is returned here from API via Future-----------------\\
-              child: FutureBuilder<Logs>(
-                  future: _logs,
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return Text("");
-                    } else {
-                      return Text(
-                          service.convertDate(snapshot.data.startDate) +
+                child: Text(
+                    service.convertDate(utilization.startDate) +
                               " - " +
                               service.convertDate(
-                                snapshot.data.endDate,
+                                utilization.endDate,
                               ),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w200,
-                              color: Colors.grey));
-                    }
-                  }),
+                              color: Colors.grey))
             ),
           ),
         ),
@@ -120,46 +99,21 @@ class UtilizationCardState extends State<UtilizationCard>
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                              child: FutureBuilder<Utilization>(
-                                  future: _utilization,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      print((snapshot.data.idlingSummary
-                                          .idleDuration /
-                                          snapshot.data.idlingSummary
-                                              .idleDuration));
-                                      return CircularProgressIndicator(
-                                        value: (snapshot.data.idlingSummary
-                                            .idleDuration /
-                                            snapshot.data.idlingSummary
-                                                .motionDuration),
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator(
-                                        value: 0,
-                                      );
-                                    }
-                                  }),
+                                child: CircularProgressIndicator(
+                                  value: (utilization.idlingSummary
+                                      .idleDuration /
+                                      utilization.idlingSummary.motionDuration),
+                                )
                             ),
                           )),
                       Positioned(
                           top: 75,
                           left: 162,
-                          child: FutureBuilder<Utilization>(
-                              future: _utilization,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text((100 *
-                                              (snapshot.data.idlingSummary
-                                                      .idleDuration /
-                                                  snapshot.data.idlingSummary
-                                                      .motionDuration))
-                                          .toStringAsFixed(0) +
-                                      "%");
-                                } else {
-                                  return Text(" ");
-                                }
-                              })),
+                          child: Text((100 *
+                              (utilization.idlingSummary.idleDuration /
+                                  utilization.idlingSummary.motionDuration))
+                              .toStringAsFixed(0) + "%")
+                      ),
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: Padding(
@@ -241,131 +195,74 @@ class UtilizationCardState extends State<UtilizationCard>
                                 children: <Widget>[
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Utilization>(
-                                          future: _utilization,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              num minutes = (snapshot
-                                                  .data
-                                                  .idlingSummary
-                                                  .idleDuration / 60).toInt();
-                                              num hours = (minutes / 60)
-                                                  .toInt();
-                                              minutes = minutes % 60;
-                                              return Padding(
-                                                  padding:
-                                                  const EdgeInsets.all(0.0),
-                                                  child: Text(
-                                                      "$hours hrs $minutes mins",
-                                                      style: TextStyle(
-                                                          fontSize: 10,
-                                                          fontWeight:
-                                                          FontWeight.w200),
-                                                      textAlign:
-                                                      TextAlign.right));
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: Text(" "),
-                                              );
-                                            }
-                                          })
+                                      Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Text(
+                                              ((utilization.idlingSummary
+                                                  .idleDuration ~/ 60) ~/ 60)
+                                                  .toString() + " hrs" +
+                                                  ((utilization.idlingSummary
+                                                      .idleDuration ~/ 60) % 60)
+                                                      .toString() + " mins",
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight:
+                                                  FontWeight.w200),
+                                              textAlign:
+                                              TextAlign.right))
                                     ],
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Utilization>(
-                                          future: _utilization,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Padding(
-                                                  padding:
-                                                  const EdgeInsets.only(
-                                                      bottom: 15.0),
-                                                  child: Text(
-                                                    (snapshot.data.idlingSummary
-                                                        .idleFuel / 3.785411784)
-                                                        .toStringAsFixed(2) +
-                                                        " gal",
+                                      Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 15.0),
+                                          child: Text((utilization.idlingSummary
+                                              .idleFuel / 3.785411784)
+                                              .toStringAsFixed(2) + " gal",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:
-                                                            FontWeight.w200,
+                                                        FontWeight.w200,
                                                         color: Colors.grey),
-                                                  ));
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: Text(" "),
-                                              );
-                                            }
-                                          })
+                                          ))
                                     ],
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Utilization>(
-                                          future: _utilization,
-                                          builder: (context, snapshot) {
-                                            num minutes = (snapshot
-                                                .data
-                                                .idlingSummary
-                                                .motionDuration / 60).toInt();
-                                            num hours = (minutes / 60).toInt();
-                                            minutes = minutes % 60;
-                                            if (snapshot.hasData) {
-                                              return Padding(
+                                      Padding(
                                                 padding: const EdgeInsets.all(
                                                     0.0),
-                                                child: Text(
-                                                    "$hours hrs $minutes mins",
+                                        child: Text(((utilization.idlingSummary
+                                            .idleDuration ~/ 60) ~/ 60)
+                                            .toString() + " hrs" +
+                                            ((utilization.idlingSummary
+                                                .idleDuration ~/ 60) % 60)
+                                                .toString() + " mins",
                                                     style: TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:
                                                         FontWeight.w200),
                                                     textAlign: TextAlign.right),
-                                              );
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                const EdgeInsets.all(0.0),
-                                                child: Text(" "),
-                                              );
-                                            }
-                                          })
+                                      )
                                     ],
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      FutureBuilder<Utilization>(
-                                          future: _utilization,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 20.0),
-                                                child: Text(
-                                                  (snapshot.data.idlingSummary
-                                                      .motionFuel / 3.785411784)
-                                                      .toStringAsFixed(2) +
-                                                      " gal",
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 20.0),
+                                        child: Text(
+                                          (utilization.idlingSummary
+                                              .motionFuel / 3.785411784)
+                                              .toStringAsFixed(2) + " gal",
                                                   style: TextStyle(
                                                       fontSize: 10,
                                                       fontWeight: FontWeight
                                                           .w200,
                                                       color: Colors.grey),
-                                                ),
-                                              );
-                                            } else {
-                                              return Padding(
-                                                padding:
-                                                    const EdgeInsets.all(0.0),
-                                                child: Text(" "),
-                                              );
-                                            }
-                                          })
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ],
