@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'circleprogressbar.dart';
 import 'model.dart';
 import 'services.dart';
 
 Services service = new Services();
+
+class HexToColor extends Color {
+  static _hexToColor(String code) {
+    return int.parse(code.substring(1, 7), radix: 16) + 0xFF000000;
+  }
+
+  HexToColor(final String code) : super(_hexToColor(code));
+}
 
 class UtilizationCard extends StatelessWidget {
   final Utilization utilization;
@@ -99,7 +108,9 @@ class UtilizationCard extends StatelessWidget {
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                                child: CircularProgressIndicator(
+                                child: CircleProgressBar(
+                                  backgroundColor: HexToColor("#edf4fa"),
+                                  foregroundColor: HexToColor("#428cd0"),
                                   value: (utilization.idlingSummary
                                       .idleDuration /
                                       utilization.idlingSummary.motionDuration),
@@ -234,10 +245,10 @@ class UtilizationCard extends StatelessWidget {
                                                 padding: const EdgeInsets.all(
                                                     0.0),
                                         child: Text(((utilization.idlingSummary
-                                            .idleDuration ~/ 60) ~/ 60)
+                                            .motionDuration ~/ 60) ~/ 60)
                                             .toString() + " hrs" +
                                             ((utilization.idlingSummary
-                                                .idleDuration ~/ 60) % 60)
+                                                .motionDuration ~/ 60) % 60)
                                                 .toString() + " mins",
                                                     style: TextStyle(
                                                         fontSize: 10,

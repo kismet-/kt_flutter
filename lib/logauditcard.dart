@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'circleprogressbar.dart';
+import 'logssearchresults.dart';
 import 'model.dart';
 import 'services.dart';
 
 Services service = Services();
+
+class HexToColor extends Color {
+  static _hexToColor(String code) {
+    return int.parse(code.substring(1, 7), radix: 16) + 0xFF000000;
+  }
+
+  HexToColor(final String code) : super(_hexToColor(code));
+}
 
 class LogAuditCard extends StatelessWidget {
   final Logs logs;
@@ -34,14 +44,20 @@ class LogAuditCard extends StatelessWidget {
         Align(
           alignment: Alignment.bottomLeft,
           heightFactor: 1,
-          child: Text(
-            '    View Logs\n',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.w400,
-                fontSize: 13.0,
-                fontFamily: "openSans"),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => LogsSearchResults(),));
+            },
+            child: Text(
+              '    View Logs\n',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13.0,
+                  fontFamily: "openSans"),
+            ),
           ),
         ),
         // ---------------  Date  -----------------\\
@@ -117,10 +133,13 @@ class LogAuditCard extends StatelessWidget {
                                   child: Container(
                                     width: 70,
                                     height: 70,
-                                    child: CircularProgressIndicator(
+                                    child: CircleProgressBar(
+
+                                      backgroundColor: HexToColor("#edf4fa"),
+
+                                      foregroundColor: HexToColor("#428cd0"),
                                       value: (logs.logsCount.compliant /
                                           logs.logsCount.all),
-                                      backgroundColor: Colors.blue,
                                     ),
                                   )
                               ),

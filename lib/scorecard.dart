@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
+import 'circleprogressbar.dart';
 import 'model.dart';
+import 'scoresearchresults.dart';
 import 'services.dart';
 
 Services service = Services();
+
+class HexToColor extends Color {
+  static _hexToColor(String code) {
+    return int.parse(code.substring(1, 7), radix: 16) + 0xFF000000;
+  }
+
+  HexToColor(final String code) : super(_hexToColor(code));
+}
 
 class ScoreCard extends StatelessWidget {
   final Scorecard score;
@@ -32,7 +42,12 @@ class ScoreCard extends StatelessWidget {
         Align(
           alignment: Alignment.bottomLeft,
           heightFactor: 1,
-          child: Text(
+          child: InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) => ScoreSearchResults(),));
+            },
+            child: Text(
             '    View Scorecards\n',
             textAlign: TextAlign.left,
             style: TextStyle(
@@ -41,6 +56,7 @@ class ScoreCard extends StatelessWidget {
                 fontSize: 13.0,
                 fontFamily: "openSans"),
           ),
+        ),
         ),
         // ---------------  Date  -----------------\\
         SizedBox(
@@ -99,7 +115,9 @@ class ScoreCard extends StatelessWidget {
                               width: 70.0,
                               height: 70.0,
                               // ------------------  Card Radial Percentage -----------------\\
-                                child: CircularProgressIndicator(
+                                child: CircleProgressBar(
+                                  backgroundColor: HexToColor("#edf4fa"),
+                                  foregroundColor: HexToColor("#428cd0"),
                                   value: (score.driverPerformanceSummary
                                                 .totalScore /
                                             100),

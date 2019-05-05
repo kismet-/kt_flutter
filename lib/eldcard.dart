@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'circleprogressbar.dart';
 
 import 'model.dart';
+import 'eldsearchresults.dart';
 import 'services.dart';
 
 Services service = new Services();
+
+class HexToColor extends Color {
+  static _hexToColor(String code) {
+    return int.parse(code.substring(1, 7), radix: 16) + 0xFF000000;
+  }
+
+  HexToColor(final String code) : super(_hexToColor(code));
+}
 
 class ELDCard extends StatelessWidget {
   final ElDevents eld;
@@ -32,14 +42,20 @@ class ELDCard extends StatelessWidget {
         Align(
           alignment: Alignment.bottomLeft,
           heightFactor: 1,
-          child: Text(
-            '    View ELD Events\n',
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.w400,
-                fontSize: 13.0,
-                fontFamily: "openSans"),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => EldSearchResults(),));
+            },
+            child: Text(
+              '    View ELD Events\n',
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13.0,
+                  fontFamily: "openSans"),
+            ),
           ),
         ),
         // ---------------  Date  -----------------\\
@@ -97,7 +113,9 @@ class ELDCard extends StatelessWidget {
                             width: 70.0,
                             height: 70.0,
                             // ------------------  Card Radial Percentage -----------------\\
-                              child: CircularProgressIndicator(
+                              child: CircleProgressBar(
+                                backgroundColor: HexToColor("#edf4fa"),
+                                foregroundColor: HexToColor("#428cd0"),
                                       value: 1 -
                                           eld.drivingPeriodsCount.unidentified /
                                               eld.drivingPeriodsCount.all,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:kt_flutter/scorecard.dart';
 
 import 'driverscard.dart';
 import 'eldcard.dart';
+import 'homescreenbloc.dart';
 import 'inspectionreportscard.dart';
 import 'logauditcard.dart';
 import 'model.dart';
@@ -10,114 +12,138 @@ import 'recentdocumentscard.dart';
 import 'services.dart';
 import 'utilizationcard.dart';
 
-Services service = new Services();
-
+final String assetName = 'assets/icons/keeptruckin-logo.svg';
 
 class HomeBody extends StatefulWidget {
+  final Services service = new Services();
+
   @override
-  State<StatefulWidget> createState() {
-    return _HomeBodyState();
-  }
+  State<StatefulWidget> createState() => _HomeBodyState();
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  bool _isLoading = false;
+  HomeScreenBloc _homeScreenBloc;
 
-  Logs logs;
-  Scorecard score;
-  ElDevents eld;
-  Utilization utilization;
-  Drivers drivers;
-  Dvir dvir;
-  Documents docs;
-
+  @override
   void initState() {
+    _homeScreenBloc = HomeScreenBloc(widget.service);
     super.initState();
-    var state = "loading";
-    print(state);
   }
+
+
+  final Widget svg = new SvgPicture.asset(
+      assetName,
+      semanticsLabel: 'Acme Logo'
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-          child: _isLoading ? _buildLoading() : _buildBody(),
-        )
+    return StreamBuilder<HomeScreenState>(
+      stream: _homeScreenBloc.logs,
+      initialData: HomeScreenInitState(),
+      builder: (context, snapshot) {
+        if (snapshot.data is HomeScreenInitState) {
+          return _buildInit();
+        }
+        if (snapshot.data is HomeScreenDataLoadedState) {
+          HomeScreenDataLoadedState state = snapshot.data;
+          return _buildLoaded(
+              state.logs,
+              state.score,
+              state.eld,
+              state.utilization,
+              state.drivers,
+              state.dvir,
+              state.documents);
+        }
+        if (snapshot.data is HomeScreenLoadingState) {
+          return _buildLoading();
+        }
+      },
     );
   }
 
-  Widget _buildBody() {
-    if (logs != null) {
-      return _buildContent();
-    } else {
-      return _buildInit();
-    }
-  }
 
   Widget _buildInit() {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+
         children: <Widget>[
-          new TextField(
-            textAlign: TextAlign.center,
+          svg,
+          Text("Log in to your account",
+            style: TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,),
+          TextField(
+            obscureText: false,
             decoration: InputDecoration(
-                border: InputBorder.none, hintText: 'X-Web-User-Auth Key'),
+                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                hintText: "Email or Username",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0))),
           ),
-          new TextField(
-            textAlign: TextAlign.center,
+          TextField(
+            obscureText: true,
             decoration: InputDecoration(
-                border: InputBorder.none, hintText: 'Authorization Key'),
+                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                hintText: "Password",
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4.0))),
           ),
           RaisedButton(
-            child: const Text('Load user data'),
+            child: const Text('Log In'),
             onPressed: () {
-              setState(() {
-                _isLoading = true;
-              });
-              service.getLogs().then((data0) =>
-                  service.getScore().then((data1) =>
-                      service.getELDevents().then((data2) =>
-                          service.getUtilization().then((data3) =>
-                              service.getDrivers().then((data4) =>
-                                  service.getDvirs().then((data5) =>
-                                      service.getDocuments().then((data6) =>
-                                          setState(() {
-                                            logs = data0;
-                                            score = data1;
-                                            eld = data2;
-                                            utilization = data3;
-                                            drivers = data4;
-                                            dvir = data5;
-                                            docs = data6;
-
-                                            _isLoading = false;
-                                          }
-                                          )
-                                      )
-                                  )
-                              )
-                          )
-                      )
-                  )
-              );
+              _homeScreenBloc.getLogsData();
+//              Future initiate() async {
+//                var client = http.Client();
+//                http.Response response = await client.get(
+//                    'https://keeptruckin.com/log-in'
+//                );
+//
+//                var document = parse(response.body);
+//
+//                String links = document.querySelector('name=').toString();
+//
+//
+//                debugPrint(links);
+//
+//
+//              }
+//              initiate();
             },
           ),
+          Text("Forgot your password?"),
+          Text("Don't have an account?"),
+          Text("Sign Up"),
+
+
+//          new TextField(
+//            textAlign: TextAlign.center,
+//            decoration: InputDecoration(
+//                border: InputBorder.none, hintText: 'X-Web-User-Auth Key'),
+//          ),
+//          new TextField(
+//            textAlign: TextAlign.center,
+//            decoration: InputDecoration(
+//                border: InputBorder.none, hintText: 'Authorization Key'),
+//          ),
         ],
       ),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildLoaded(Logs logs, Scorecard score, ElDevents eld,
+      Utilization utilization, Drivers drivers, Dvir dvirs,
+      Documents documents) {
     return ListView(
         children: <Widget>[
-          LogAuditCard(logs: this.logs),
-          ScoreCard(score: this.score),
-          ELDCard(eld: this.eld),
-          UtilizationCard(utilization: this.utilization),
-          DriversCard(drivers: this.drivers),
-          InspectionReportsCard(dvir: dvir),
-          RecentDocumentsCard(docs: docs),
+          LogAuditCard(logs: logs),
+          ScoreCard(score: score),
+          ELDCard(eld: eld),
+          UtilizationCard(utilization: utilization),
+          DriversCard(drivers: drivers),
+          InspectionReportsCard(dvir: dvirs),
+          RecentDocumentsCard(docs: documents),
         ]
     );
   }
@@ -127,5 +153,132 @@ class _HomeBodyState extends State<HomeBody> {
       child: CircularProgressIndicator(),
     );
   }
+
+  @override
+  void dispose() {
+    _homeScreenBloc.dispose();
+    super.dispose();
+  }
 }
+
+
+//class HomeBody extends StatefulWidget {
+//  @override
+//  State<StatefulWidget> createState() {
+//    return _HomeBodyState();
+//  }
+//}
+//
+//class _HomeBodyState extends State<HomeBody> {
+//  bool _isLoading = false;
+//
+//  Logs logs;
+//  Scorecard score;
+//  ElDevents eld;
+//  Utilization utilization;
+//  Drivers drivers;
+//  Dvir dvir;
+//  Documents docs;
+//
+//  LogsQueryResponse logsQuery;
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Scaffold(
+//      body: _isLoading ? _buildLoading() : _buildBody(),
+//    );
+//  }
+//
+//  Widget _buildBody() {
+//    if (logs != null) {
+//      return _buildContent();
+//    } else {
+//      return _buildInit();
+//    }
+//  }
+//
+//  Widget _buildInit() {
+//    return Center(
+//      child: Column(
+//        mainAxisAlignment: MainAxisAlignment.center,
+//        children: <Widget>[
+//          new TextField(
+//            textAlign: TextAlign.center,
+//            decoration: InputDecoration(
+//                border: InputBorder.none, hintText: 'X-Web-User-Auth Key'),
+//          ),
+//          new TextField(
+//            textAlign: TextAlign.center,
+//            decoration: InputDecoration(
+//                border: InputBorder.none, hintText: 'Authorization Key'),
+//          ),
+//          RaisedButton(
+//            child: const Text('Load user data'),
+//            onPressed: () {
+//              setState(() {
+//                _isLoading = true;
+//              });
+//              service.getLogs().then((data0) =>
+//                  service.getScore().then((data1) =>
+//                      service.getELDevents().then((data2) =>
+//                          service.getUtilization().then((data3) =>
+//                              service.getDrivers().then((data4) =>
+//                                  service.getDvirs().then((data5) =>
+//                                      service.getDocuments().then((data6) =>
+//                                          service.getLogsQueryResponse().then((
+//                                              data7) =>
+//                                              setState(() {
+//                                                logs = data0;
+//                                                print(logs.startDate);
+//                                                score = data1;
+//                                                eld = data2;
+//                                                utilization = data3;
+//                                                drivers = data4;
+//                                                dvir = data5;
+//                                                docs = data6;
+//                                                logsQuery = data7;
+//
+//                                                _isLoading = false;
+//                                              }
+//                                              )
+//                                          )
+//                                      )
+//                                  )
+//                              )
+//                          )
+//                      )
+//                  )
+//              );
+//            },
+//          ),
+//        ],
+//      ),
+//    );
+//  }
+//
+//  Widget _buildContent() {
+//    return ListView(
+//        children: <Widget>[
+//          LogAuditCard(logs: this.logs),
+//          ScoreCard(score: this.score),
+//          ELDCard(eld: this.eld),
+//          UtilizationCard(utilization: this.utilization),
+//          DriversCard(drivers: this.drivers),
+//          InspectionReportsCard(dvir: dvir),
+//          RecentDocumentsCard(docs: docs),
+//        ]
+//    );
+//  }
+//
+//  Widget _buildTest() {
+//    return LogsSearchResults(logsQuery: this.logsQuery, logs: logs,);
+//  }
+//
+//
+//  Widget _buildLoading() {
+//    return const Center(
+//      child: CircularProgressIndicator(),
+//    );
+//  }
+//}
 

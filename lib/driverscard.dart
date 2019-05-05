@@ -49,7 +49,7 @@ class DriversCardState extends State<DriversCard>
     Future<void> _createMarkerImageFromAsset(BuildContext context) async {
       if (_markerIcon == null) {
         BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(10.0, 10.0)),
+            ImageConfiguration(size: Size(2.0, 2.0)),
             'assets/icons/marker.png')
             .then(_updateBitmap);
       }
@@ -99,6 +99,7 @@ class DriversCardState extends State<DriversCard>
         child: Stack(
           children: <Widget>[
             GoogleMap(
+              myLocationButtonEnabled: false,
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                     widget.drivers.driverLocations[0].driverLocation.lat,

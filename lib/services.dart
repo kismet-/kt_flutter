@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 
+import 'eldresponsemodel.dart';
 import 'model.dart';
+import 'queryresponsemodel.dart';
+import 'scoreresponsemodel.dart';
 
 class Services {
   static final Services _services = new Services._internal();
@@ -97,6 +100,45 @@ class Services {
     });
     print("---------getDocuments fired");
     return documentsFromJson(responseDocuments.body);
+  }
+
+  //--------- Results Search methods
+
+  Future<LogsQueryResponse> getLogsQueryResponse() async {
+    final logsQueryresponse = await http.get(
+        'https://api.keeptruckin.com/v1/logs;start_date=2019-04-15;end_date=2019-04-29;log_status=all',
+        headers: {
+          'X-Api-Key': 'fc02954d-cfa3-4579-959a-a1abd6b8d494',
+          'X-Time-Zone': 'Central Time (US & Canada)'
+        });
+    print(logsQueryresponse.body);
+    return logsQueryResponseFromJson(logsQueryresponse.body);
+  }
+
+  Future<ScoreQueryResponse> getScoreQueryResponse() async {
+    final scoreQueryresponse = await http.get(
+        'https://api.keeptruckin.com/api/w2/driver_performance/summary?page_no=1&start_date=2019-04-20&end_date=2019-05-04&sort_field=driver_name&sort_direction=asc&p',
+        headers: {
+          'X-Web-User-Auth': 'AwUyrEKCW6t4ybLdrh0Wqq9Q+iSH5msAi+XuYQDvTzBscaTGNCJGgOsWHyQ7elxM',
+          //'X-Time-Zone': 'Central Time (US & Canada)'
+        });
+    print(scoreQueryresponse.body);
+    return scoreQueryResponseFromJson(scoreQueryresponse.body);
+  }
+
+  Future<EldQueryResponse> getEldQueryResponse() async {
+    final eldQueryresponse = await http.get(
+        'https://api.keeptruckin.com/api/w2/driving_periods?page_no=2&start_date=2019-04-20&end_date=2019-05-04&sort_field=start_time&sort_direction=desc&per_page=50',
+        headers: {
+          'X-Web-User-Auth': 'AwUyrEKCW6t4ybLdrh0Wqq9Q+iSH5msAi+XuYQDvTzBscaTGNCJGgOsWHyQ7elxM',
+          //'X-Time-Zone': 'Central Time (US & Canada)'
+        });
+    print(eldQueryresponse.body);
+    return eldQueryResponseFromJson(eldQueryresponse.body);
+  }
+
+  Future getAuthToken() async {
+
   }
 
   String convertDate(String date) {
